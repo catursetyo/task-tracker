@@ -116,6 +116,49 @@ form.addEventListener("submit", async e => {
   }
 });
 
+list.addEventListener("click", async e => {
+  const li = e.target.closest("li[data-id]");
+  if (!li) return;
+  const id = Number(li.dataset.id);
+  const isHapus = e.target.closest(".hapus");
+  const isCek = e.target.closest(".cek");
+  if (!isHapus && !isCek) return;
+
+  const err = document.querySelector("#err");
+  err.textContent = "";
+  li.classList.add("proses");
+
+  if (isHapus) {
+    const idx = state.tugas.findIndex(x => x.id === id);
+    if (idx === -1) return;
+    const [hapus] = state.tugas.splice(idx, 1);
+    render();
+    try {
+      await api("/api/tugas/" + id, { method: "DELETE" });
+    } catch (e2) {
+      state.tugas.splice(idx, 0, hapus);
+      render();
+      err.textContent = "Gagal menghapus: " + e2.message;
+    }
+  } else if (isCek) {
+    const t = state.tugas.find(x => x.id === id);
+    if (!t) return;
+    t.selesai = !t.selesai;
+    render();
+    try {
+      const updated = await api("/api/tugas/" + id, {
+        method: "PATCH",
+        body: { selesai: t.selesai }
+      });
+      Object.assign(t, updated);
+    } catch (e2) {
+      t.selesai = !t.selesai;
+      render();
+      err.textContent = "Gagal memperbarui: " + e2.message;
+    }
+  }
+});
+
 info.addEventListener("click", e => {
   if (e.target.id === "ulang") muat();
 });
