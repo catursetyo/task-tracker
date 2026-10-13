@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Task Tracker Kuliah</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app">
+    <h3>📋 Task Tracker Kuliah</h3>
+    <form id="form" novalidate>
+      <input name="judul" placeholder="Judul tugas (min. 3 karakter)">
+      <div class="baris">
+        <select name="matkul">
+          <option>Pemrograman Web</option>
+          <option>Basis Data</option>
+          <option>Struktur Data</option>
+        </select>
+        <input name="deadline" type="date">
+        <button type="submit">Tambah</button>
+      </div>
+      <p id="err" class="err"></p>
+    </form>
+    <div class="filter" id="filter">
+      <button data-f="semua" class="on">Semua</button>
+      <button data-f="aktif">Aktif</button>
+      <button data-f="selesai">Selesai</button>
+      <span id="counter" class="counter"></span>
+    </div>
+    <ul id="list"></ul>
+  </div>
+</body>
+</html>
