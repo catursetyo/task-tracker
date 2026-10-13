@@ -80,6 +80,42 @@ async function muat() {
   render();
 }
 
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  const err = document.querySelector("#err");
+  const btn = document.querySelector("#simpan");
+  const judul = form.elements.judul.value.trim();
+  const deadline = form.elements.deadline.value;
+
+  if (judul.length < 3) {
+    err.textContent = "Judul minimal 3 karakter.";
+    return;
+  }
+  if (!deadline) {
+    err.textContent = "Deadline wajib diisi.";
+    return;
+  }
+  err.textContent = "";
+  btn.disabled = true;
+  btn.textContent = "Menyimpan…";
+
+  try {
+    const baru = await api("/api/tugas", {
+      method: "POST",
+      body: { judul, matkul: form.elements.matkul.value, deadline }
+    });
+    state.tugas.push(baru);
+    form.elements.judul.value = "";
+    form.elements.deadline.value = "";
+    render();
+  } catch (e2) {
+    err.textContent = "Gagal menyimpan: " + e2.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Tambah";
+  }
+});
+
 info.addEventListener("click", e => {
   if (e.target.id === "ulang") muat();
 });
