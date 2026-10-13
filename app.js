@@ -10,7 +10,12 @@ async function api(url, opsi) {
     init.headers = { "Content-Type": "application/json" };
     init.body = JSON.stringify(opsi.body);
   }
-  const res = await fetch(url, init);
+  let res;
+  try {
+    res = await fetch(url, init);
+  } catch (err) {
+    throw new Error(err.message === "Failed to fetch" ? "Koneksi terputus / offline" : err.message);
+  }
   if (!res.ok) {
     const b = await res.json().catch(() => ({}));
     throw new Error(b.error || "HTTP " + res.status);
@@ -73,6 +78,7 @@ async function muat() {
     form.elements.matkul.innerHTML = "";
     matkul.forEach(m => form.elements.matkul.append(new Option(m.nama, m.nama)));
     state.status = "success";
+    state.error = null;
   } catch (e) {
     state.status = "error";
     state.error = e.message;
@@ -128,33 +134,40 @@ list.addEventListener("click", async e => {
   err.textContent = "";
   li.classList.add("proses");
 
-  if (isHapus) {
-    const idx = state.tugas.findIndex(x => x.id === id);
-    if (idx === -1) return;
-    const [hapus] = state.tugas.splice(idx, 1);
-    render();
-    try {
-      await api("/api/tugas/" + id, { method: "DELETE" });
-    } catch (e2) {
-      state.tugas.splice(idx, 0, hapus);
+  try {
+    if (isHapus) {
+      const idx = state.tugas.findIndex(x => x.id === id);
+      if (idx === -1) return;
+      const [hapus] = state.tugas.splice(idx, 1);
       render();
-      err.textContent = "Gagal menghapus: " + e2.message;
-    }
-  } else if (isCek) {
-    const t = state.tugas.find(x => x.id === id);
-    if (!t) return;
-    t.selesai = !t.selesai;
-    render();
-    try {
-      const updated = await api("/api/tugas/" + id, {
-        method: "PATCH",
-        body: { selesai: t.selesai }
-      });
-      Object.assign(t, updated);
-    } catch (e2) {
+      try {
+        await api("/api/tugas/" + id, { method: "DELETE" });
+      } catch (e2) {
+        state.tugas.splice(idx, 0, hapus);
+        render();
+        err.textContent = "Gagal menghapus: " + e2.message;
+      }
+    } else if (isCek) {
+      const t = state.tugas.find(x => x.id === id);
+      if (!t) return;
       t.selesai = !t.selesai;
       render();
-      err.textContent = "Gagal memperbarui: " + e2.message;
+      try {
+        const updated = await api("/api/tugas/" + id, {
+          method: "PATCH",
+          body: { selesai: t.selesai }
+        });
+        Object.assign(t, updated);
+      } catch (e2) {
+        t.selesai = !t.selesai;
+        render();
+        err.textContent = "Gagal memperbarui: " + e2.message;
+      }
+    }
+  } finally {
+    const currentLi = document.querySelector(`li[data-id="${id}"]`);
+    if (currentLi) {
+      currentLi.classList.remove("proses");
     }
   }
 });
