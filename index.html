@@ -3,23 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Task Tracker Kuliah</title>
+  <title>Task Tracker Kuliah v2 · REST API</title>
   <link rel="stylesheet" href="style.css">
+  <script src="mock-api.js"></script>
   <script src="app.js" defer></script>
 </head>
 <body>
   <div class="app">
-    <h3>📋 Task Tracker Kuliah</h3>
+    <h3>📋 Task Tracker Kuliah <small>v2 · REST API</small></h3>
     <form id="form" novalidate>
       <input name="judul" placeholder="Judul tugas (min. 3 karakter)">
       <div class="baris">
-        <select name="matkul">
-          <option>Pemrograman Web</option>
-          <option>Basis Data</option>
-          <option>Struktur Data</option>
-        </select>
+        <select name="matkul"></select>
         <input name="deadline" type="date">
-        <button type="submit">Tambah</button>
+        <button type="submit" id="simpan">Tambah</button>
       </div>
       <p id="err" class="err"></p>
     </form>
@@ -29,6 +26,7 @@
       <button data-f="selesai">Selesai</button>
       <span id="counter" class="counter"></span>
     </div>
+    <p id="info" class="info"></p>
     <ul id="list"></ul>
   </div>
 </body>
