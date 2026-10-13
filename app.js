@@ -1,19 +1,42 @@
-let tugas = [
-  { id: 1, judul: "Lab 10 event delegation", matkul: "Pemrograman Web", deadline: "2026-10-08", selesai: false },
-  { id: 2, judul: "ERD sistem perpustakaan", matkul: "Basis Data", deadline: "2026-10-12", selesai: true }
-];
-let nextId = 3;
+const STORAGE_KEY = "task-tracker-v1";
+
+function muatPenyimpanan() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) return JSON.parse(data);
+  } catch (e) {}
+  return [
+    { id: 1, judul: "Lab 10 event delegation", matkul: "Pemrograman Web", deadline: "2026-10-08", selesai: false },
+    { id: 2, judul: "ERD sistem perpustakaan", matkul: "Basis Data", deadline: "2026-10-12", selesai: true }
+  ];
+}
+
+function simpanPenyimpanan() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(tugas));
+  } catch (e) {}
+}
+
+let tugas = muatPenyimpanan();
+let nextId = tugas.reduce((m, t) => Math.max(m, t.id), 0) + 1;
+let filter = "semua";
+
 const list = document.querySelector("#list");
 const counter = document.querySelector("#counter");
 const form = document.querySelector("#form");
 const err = document.querySelector("#err");
+const filterEl = document.querySelector("#filter");
 
 function render() {
+  const data = tugas
+    .filter(t => filter === "semua" || (filter === "aktif" ? !t.selesai : t.selesai))
+    .sort((a, b) => a.deadline.localeCompare(b.deadline));
+
   list.innerHTML = "";
-  if (!tugas.length) {
+  if (!data.length) {
     list.innerHTML = '<li class="kosong">Tidak ada tugas di sini 🎉</li>';
   }
-  tugas.forEach(t => {
+  data.forEach(t => {
     const li = document.createElement("li");
     li.dataset.id = t.id;
     if (t.selesai) {
@@ -27,6 +50,7 @@ function render() {
   });
   const aktif = tugas.filter(t => !t.selesai).length;
   counter.textContent = aktif + " tugas aktif";
+  simpanPenyimpanan();
 }
 
 form.addEventListener("submit", e => {
@@ -64,6 +88,14 @@ list.addEventListener("click", e => {
   } else {
     return;
   }
+  render();
+});
+
+filterEl.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  filter = b.dataset.f;
+  filterEl.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
   render();
 });
 
