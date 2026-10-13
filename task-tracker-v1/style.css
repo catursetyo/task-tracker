@@ -1,0 +1,145 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 10px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #1d2b36;
+  font-size: 14px;
+  line-height: 1.45;
+  background: #fff;
+}
+
+.app {
+  font-size: 13px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+#form input[name="judul"] {
+  width: 100%;
+}
+
+.baris {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.baris select,
+.baris input {
+  flex: 1;
+  min-width: 0;
+}
+
+input,
+select,
+button {
+  font: inherit;
+  font-size: 13px;
+  border-radius: 6px;
+}
+
+input,
+select {
+  padding: 6px 8px;
+  border: 1px solid #b7c9d6;
+  background: #fff;
+  color: #1d2b36;
+}
+
+button {
+  padding: 6px 12px;
+  border: 1px solid #132A3E;
+  background: #132A3E;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.err {
+  color: #B23A26;
+  margin: 4px 0 0;
+  min-height: 1em;
+  font-size: 12px;
+}
+
+.filter {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin: 6px 0;
+}
+
+.filter button {
+  background: #fff;
+  color: #132A3E;
+  border: 1px solid #b7c9d6;
+  padding: 3px 9px;
+  font-size: 12px;
+}
+
+.filter button.on {
+  background: #132A3E;
+  color: #fff;
+}
+
+.counter {
+  margin-left: auto;
+  color: #5d7a91;
+  font-size: 12px;
+}
+
+#list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#list li {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 8px;
+  border: 1px solid #d7e1e8;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+
+#list li.done .judul {
+  text-decoration: line-through;
+  color: #8fa5b5;
+}
+
+.meta {
+  color: #5d7a91;
+  font-size: 11px;
+}
+
+.isi {
+  flex: 1;
+  min-width: 0;
+}
+
+.hapus {
+  background: #fff;
+  color: #B23A26;
+  border: 1px solid #e3b2a8;
+  padding: 1px 7px;
+}
+
+.kosong {
+  color: #8fa5b5;
+  font-style: italic;
+  justify-content: center;
+}
