@@ -5,6 +5,8 @@ let tugas = [
 let nextId = 3;
 const list = document.querySelector("#list");
 const counter = document.querySelector("#counter");
+const form = document.querySelector("#form");
+const err = document.querySelector("#err");
 
 function render() {
   list.innerHTML = "";
@@ -26,5 +28,29 @@ function render() {
   const aktif = tugas.filter(t => !t.selesai).length;
   counter.textContent = aktif + " tugas aktif";
 }
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const judul = form.elements.judul.value.trim();
+  const deadline = form.elements.deadline.value;
+  if (judul.length < 3) {
+    err.textContent = "Judul minimal 3 karakter.";
+    return;
+  }
+  if (!deadline) {
+    err.textContent = "Deadline wajib diisi.";
+    return;
+  }
+  err.textContent = "";
+  tugas.push({
+    id: nextId++,
+    judul,
+    matkul: form.elements.matkul.value,
+    deadline,
+    selesai: false
+  });
+  form.reset();
+  render();
+});
 
 render();
