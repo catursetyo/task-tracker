@@ -1,0 +1,30 @@
+let tugas = [
+  { id: 1, judul: "Lab 10 event delegation", matkul: "Pemrograman Web", deadline: "2026-10-08", selesai: false },
+  { id: 2, judul: "ERD sistem perpustakaan", matkul: "Basis Data", deadline: "2026-10-12", selesai: true }
+];
+let nextId = 3;
+const list = document.querySelector("#list");
+const counter = document.querySelector("#counter");
+
+function render() {
+  list.innerHTML = "";
+  if (!tugas.length) {
+    list.innerHTML = '<li class="kosong">Tidak ada tugas di sini 🎉</li>';
+  }
+  tugas.forEach(t => {
+    const li = document.createElement("li");
+    li.dataset.id = t.id;
+    if (t.selesai) {
+      li.classList.add("done");
+    }
+    li.innerHTML = '<input type="checkbox" class="cek"><div class="isi"><div class="judul"></div><div class="meta"></div></div><button type="button" class="hapus">✕</button>';
+    li.querySelector(".cek").checked = t.selesai;
+    li.querySelector(".judul").textContent = t.judul;
+    li.querySelector(".meta").textContent = t.matkul + " · deadline " + t.deadline;
+    list.append(li);
+  });
+  const aktif = tugas.filter(t => !t.selesai).length;
+  counter.textContent = aktif + " tugas aktif";
+}
+
+render();
