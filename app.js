@@ -53,4 +53,18 @@ form.addEventListener("submit", e => {
   render();
 });
 
+list.addEventListener("click", e => {
+  const li = e.target.closest("li[data-id]");
+  if (!li) return;
+  const id = Number(li.dataset.id);
+  if (e.target.closest(".hapus")) {
+    tugas = tugas.filter(t => t.id !== id);
+  } else if (e.target.closest(".cek")) {
+    tugas = tugas.map(t => t.id === id ? { ...t, selesai: !t.selesai } : t);
+  } else {
+    return;
+  }
+  render();
+});
+
 render();
